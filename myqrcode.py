@@ -27,6 +27,10 @@ def menu():
 
 def create_qr():
     nonSite = ""
+    village = ""
+    typeOuvrage = ""
+    sysLavMain = ""
+    popMenage = ""
     longitude = ""
     latitude = ""
     commune = ""
@@ -35,7 +39,7 @@ def create_qr():
     dateMiseService = ""
     today = date.today()
     now = today.strftime("%d/%m/%Y")
-    data = postbase(nonSite, longitude, latitude, commune, departement, region, dateMiseService, now)
+    data = postbase(nonSite, village, typeOuvrage, sysLavMain, popMenage, longitude, latitude, commune, departement, region, dateMiseService, now)
     #array = [nonSite, longitude, latitude, commune, departement, region, dateMiseService, now]
     #data = '.'.join(array)
     generate_qr(data,nonSite)
@@ -43,8 +47,16 @@ def create_qr():
 
 def fill_qr():
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("Donner le nom du site", end=' ')
+    print("Donner le nom du menage", end=' ')
     nonSite = input()
+    print("Donner le nom du village", end=' ')
+    village = input()
+    print("Donner le type d'ouvrage", end=' ')
+    typeOuvrage = input()
+    print("Exist-il un systeme de lavage de main o/n", end=' ')
+    sysLavMain = input()
+    print("Donner le population du menage", end=' ')
+    popMenage = input()
     print("donner la longitude dusite", end=' ')
     longitude = input()
     print("donner la latitude du site", end=' ')
@@ -59,7 +71,7 @@ def fill_qr():
     dateMiseService = input()
     today = date.today()
     now = today.strftime("%d/%m/%Y")
-    data = postbase(nonSite, longitude, latitude, commune, departement, region, dateMiseService, now)
+    data = postbase(nonSite, village, typeOuvrage, sysLavMain, popMenage, longitude, latitude, commune, departement, region, dateMiseService, now)
     #array = [nonSite, longitude, latitude, commune, departement, region, dateMiseService, now]
     #data = '.'.join(array)
     generate_qr(data,nonSite)
@@ -73,10 +85,10 @@ def getbase():
   os.system("pause")
   
 
-def postbase(nonSite, longitude, latitude, commune, departement, region, dateMiseService, now):
+def postbase(nonSite, village, typeOuvrage, sysLavMain, popMenage, longitude, latitude, commune, departement, region, dateMiseService, now):
    fire = firebase.FirebaseApplication('https://e-wanacc.firebaseio.com/', None)
    count = fire.get('/count/nbre', None)
-   new_site = {"commune":commune,"dateservie":dateMiseService,"departement":departement,"etat":"excellent","lastdate":now,"lattitude":latitude,"longitude":longitude,"nomSite":nonSite,"region":region}
+   new_site = {"commune":commune,"dateservie":dateMiseService,"departement":departement,"etat":"excellent","lastdate":now,"lattitude":latitude,"longitude":longitude,"nomSite":nonSite,"region":region,"village":village,"typeOuvrage":typeOuvrage,"sysLavMain":sysLavMain,"popMenage":popMenage}
    count +=1
    results = fire.put('/count', 'nbre',count)
    result = fire.post('/site', new_site, params={'print': 'pretty'})
